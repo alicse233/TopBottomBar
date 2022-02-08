@@ -6,25 +6,36 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 @Composable
-fun Navigation(navHostController: NavHostController) {
+fun Navigation(
+    navHostController: NavHostController,
+    onDestinationChangedListener: NavController.OnDestinationChangedListener
+) {
     NavHost(
         navHostController,
-        startDestination = "home",
+        startDestination = HOME,
     ) {
-        composable("home") {
+        composable(HOME) {
             HomeScreen()
         }
-        composable("notification") {
+        composable(NOTIFICATION) {
             NotificationScreen()
         }
-        composable("profile") {
+        composable(PROFILE) {
             ProfileScreen()
         }
+        composable(DETAIL) {
+            DetailScreen()
+        }
+    }
+
+    navHostController.addOnDestinationChangedListener { controller, destination, arguments ->
+        onDestinationChangedListener.onDestinationChanged(controller, destination, arguments)
     }
 }
 
@@ -55,5 +66,15 @@ fun ProfileScreen() {
         contentAlignment = Alignment.Center
     ) {
         Text(text = "Profile screen")
+    }
+}
+
+@Composable
+fun DetailScreen() {
+    Box(
+        Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = "Details screen")
     }
 }

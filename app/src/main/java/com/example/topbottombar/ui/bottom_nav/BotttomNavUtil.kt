@@ -2,8 +2,7 @@ package com.example.topbottombar.ui.bottom_nav
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -37,7 +36,6 @@ fun BottomNav(
                 unselectedContentColor = Color.Gray,
                 onClick = { onItemClick(item) },
                 icon = {
-
                     Column(
                         modifier = Modifier.align(CenterVertically)
                     ) {

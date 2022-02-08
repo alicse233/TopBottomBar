@@ -1,66 +1,69 @@
 package com.example.topbottombar.ui.base
 
-import android.widget.Space
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.topbottombar.app_top_bar_utils.AppTopBarData
+import com.example.topbottombar.app_top_bar_utils.TopBarHelper
 import com.example.topbottombar.ui.bottom_nav.BottomNav
 import com.example.topbottombar.ui.bottom_nav.BottomNavItem
 import com.example.topbottombar.ui.theme.TopBottomBarTheme
 import com.example.topbottombar.ui.topbar.topBar
+import kotlin.coroutines.EmptyCoroutineContext.get
 
+private val shouldShowBottomBar: Boolean
+    @Composable get() = navController
+        .currentBackStackEntryAsState().value?.destination?.route in bottomBarRoutes
 @Composable
 fun BaseApp(
 
 ) {
 
-    val bottomItems = listOf(
+    val bottomTabs = listOf(
         BottomNavItem(
             "home", Icons.Default.Home,
-            "home", "home"
+            "home", HOME
         ),
         BottomNavItem(
             "notification", Icons.Default.Notifications,
-            "notification", "notification",
+            "notification", NOTIFICATION,
             counter = 87
         ),
         BottomNavItem(
             "profile", Icons.Default.Home,
-            "profile", "profile"
+            "profile", PROFILE
         )
     )
 
+    val bottomBarRoutes = bottomTabs.map { it.route }
+
     TopBottomBarTheme {
+
         val navController = rememberNavController()
+
         val backStackEntry = navController.currentBackStackEntryAsState()
 
-        var title by remember {
-            mutableStateOf(navController.currentDestination ?: navController.currentDestination?.displayName)
+        var topBarData by remember {
+            mutableStateOf(AppTopBarData(shouldShow = false))
         }
+
 
         Scaffold(
 
             topBar = {
                 topBar(
-                    navController
+                    topBarData = topBarData
                 )
             },
 
             bottomBar = {
 
                 BottomNav(
-                    items = bottomItems,
+                    items = bottomTabs,
 
                     navController = navController,
 
@@ -69,7 +72,10 @@ fun BaseApp(
             }
         ) {
 
-            Navigation(navHostController = navController)
+            Navigation(navHostController = navController,
+                onDestinationChangedListener = { controller, destination, arguments ->
+                    topBarData = TopBarHelper.getTopBarData(destination.route ?: "")
+                })
         }
     }
 
