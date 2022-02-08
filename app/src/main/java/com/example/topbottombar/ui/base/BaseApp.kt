@@ -15,9 +15,6 @@ import com.example.topbottombar.ui.theme.TopBottomBarTheme
 import com.example.topbottombar.ui.topbar.topBar
 import kotlin.coroutines.EmptyCoroutineContext.get
 
-private val shouldShowBottomBar: Boolean
-    @Composable get() = navController
-        .currentBackStackEntryAsState().value?.destination?.route in bottomBarRoutes
 @Composable
 fun BaseApp(
 
@@ -80,3 +77,8 @@ fun BaseApp(
     }
 
 }
+
+
+//private val shouldShowBottomBar: Boolean
+//    @Composable get() = navController
+//        .currentBackStackEntryAsState().value?.destination?.route in bottomBarRoutes
