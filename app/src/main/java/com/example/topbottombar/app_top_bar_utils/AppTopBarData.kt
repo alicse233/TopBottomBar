@@ -6,4 +6,5 @@ data class AppTopBarData(
     val shouldShowBackBtn: Boolean = false,
     val showCartIcon: Boolean = false,
     val counter: Int? = null,
+    val type: Int = 0,
 )

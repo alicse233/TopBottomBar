@@ -6,7 +6,7 @@ import com.example.topbottombar.ui.base.PROFILE
 
 object TopBarHelper {
 
-    fun getTopBarData(route: String?): AppTopBarData {
+    fun getTopBarData(route: String?, title: String? = null): AppTopBarData {
         when (route) {
 
             HOME -> {
@@ -31,7 +31,9 @@ object TopBarHelper {
 
             else -> {
                 return AppTopBarData(
-                    shouldShow = false
+                    title = title?: "",
+                    shouldShow = true,
+                    shouldShowBackBtn = true
                 )
             }
         }

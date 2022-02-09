@@ -2,7 +2,9 @@ package com.example.topbottombar.ui.base
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +23,7 @@ fun Navigation(
         startDestination = HOME,
     ) {
         composable(HOME) {
-            HomeScreen()
+            HomeScreen(navController = navHostController)
         }
         composable(NOTIFICATION) {
             NotificationScreen()
@@ -40,12 +42,16 @@ fun Navigation(
 }
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     Box(
         Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = "Home screen")
+
+        TextButton(onClick = { navController.navigate(DETAIL) }) {
+
+            Text(text = "Home screen")
+        }
     }
 }
 

@@ -9,23 +9,23 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import com.example.topbottombar.app_top_bar_utils.AppTopBarData
 
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun topBar(
+fun TopBar(
     topBarData: AppTopBarData = AppTopBarData(shouldShow = false)
 ) {
     AnimatedVisibility(visible = topBarData.shouldShow) {
         TopAppBar(
             title = {
                 Text(
-                    text = topBarData.title ?: "Nothing here",
+                    text = topBarData.title,
                     style = MaterialTheme.typography.h6,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = Color.White
                 )
             },
             navigationIcon = {
