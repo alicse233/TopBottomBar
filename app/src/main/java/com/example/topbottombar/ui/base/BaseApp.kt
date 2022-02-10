@@ -62,7 +62,8 @@ fun BaseApp(
             topBar = {
                 if (topBarData.shouldShow) {
                     TopBar(
-                        topBarData = topBarData
+                        topBarData = topBarData,
+                        appGlobalState = appState
                     )
                 }
             },
@@ -74,7 +75,16 @@ fun BaseApp(
 
                         navController = navController,
 
-                        onItemClick = { navController.navigate(it.route) }
+                        onItemClick = {
+                            navController.navigate(it.route) {
+                                launchSingleTop = true
+                                restoreState = true
+                                // Pop up backstack to the first destination and save state. This makes going back
+                                // to the start destination when pressing back in any other bottom tab.
+//                popUpTo(findStartDestination(navController.graph).id) {
+//                    saveState = true }
+                            }
+                        }
                     )
                 }
             },
@@ -83,9 +93,17 @@ fun BaseApp(
             Navigation(navHostController = navController,
                 onDestinationChangedListener = { controller, destination, arguments ->
                     if (destination.route.equals(DETAIL)) {
-                        topBarData = TopBarHelper.getTopBarData(destination.route ?: "", DETAIL)
+                        topBarData = TopBarHelper.getTopBarData(
+                            destination.route ?: "",
+                            DETAIL,
+                            appState.resources,
+                            12
+                        )
                     } else {
-                        topBarData = TopBarHelper.getTopBarData(destination.route ?: "")
+                        topBarData = TopBarHelper.getTopBarData(
+                            destination.route ?: "",
+                            resources = appState.resources
+                        )
                     }
                 })
         }
@@ -112,7 +130,7 @@ class AppGlobalState(
     val scaffoldState: ScaffoldState,
     private val navController: NavHostController,
     private val snackbarManager: SnackBarManager,
-    private val resources: Resources,
+    val resources: Resources,
     coroutineScope: CoroutineScope
 ) {
     // Process snackbars coming from SnackbarManager
