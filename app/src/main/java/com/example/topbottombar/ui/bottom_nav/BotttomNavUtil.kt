@@ -40,18 +40,19 @@ fun BottomNav(
                         modifier = Modifier.align(CenterVertically)
                     ) {
                         if (item.counter != null) {
-                            BadgeBox(
+                            Column {
+                            Badge(
                                 modifier = Modifier.align(CenterHorizontally),
-                                badgeContent = {
-                                    Text(
-                                        text = item.counter.toString(),
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            ) {
-                                Icon(imageVector = item.icon, contentDescription = null)
-                            }
+                                content = {
+                                        Text(
+                                            text = item.counter.toString(),
+                                            color = Color.White,
+                                            textAlign = TextAlign.Center
+                                        )
+                                },
+                            )
+                            Icon(imageVector = item.icon, contentDescription = null)
+                        }
                         } else {
                             Icon(imageVector = item.icon, contentDescription = null)
                         }

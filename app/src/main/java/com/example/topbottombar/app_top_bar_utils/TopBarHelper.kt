@@ -14,8 +14,8 @@ object TopBarHelper {
         resources: Resources,
         counter: Int? = null
     ): AppTopBarData {
-        when (route) {
 
+        when (route) {
             HOME -> {
                 return AppTopBarData(
                     title = resources.getString(R.string.home),

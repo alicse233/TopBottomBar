@@ -1,6 +1,7 @@
 package com.example.topbottombar.ui.base
 
 import android.content.res.Resources
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -19,6 +21,8 @@ import com.example.topbottombar.ui.bottom_nav.BottomNav
 import com.example.topbottombar.ui.bottom_nav.BottomNavItem
 import com.example.topbottombar.ui.theme.TopBottomBarTheme
 import com.example.topbottombar.ui.topbar.TopBar
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.navigationBarsHeight
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
@@ -45,67 +49,80 @@ fun BaseApp(
 
 ) {
 
-    TopBottomBarTheme {
+    ProvideWindowInsets {
+        TopBottomBarTheme {
 
-        val navController = rememberNavController()
+            val navController = rememberNavController()
 
-        var topBarData by remember {
-            mutableStateOf(AppTopBarData(shouldShow = false))
-        }
+            var topBarData by remember {
+                mutableStateOf(AppTopBarData(shouldShow = false))
+            }
 
-        val appState = rememberAppState(
-            navController = navController,
-        )
+            val appState = rememberAppState(
+                navController = navController,
+            )
 
-        Scaffold(
+            Scaffold(
 
-            topBar = {
-                if (topBarData.shouldShow) {
-                    TopBar(
-                        topBarData = topBarData,
-                        appGlobalState = appState
-                    )
-                }
-            },
-
-            bottomBar = {
-                if (appState.shouldShowBottomBar) {
-                    BottomNav(
-                        items = bottomTabs,
-
-                        navController = navController,
-
-                        onItemClick = {
-                            navController.navigate(it.route) {
-                                launchSingleTop = true
-                                restoreState = true
-                                // Pop up backstack to the first destination and save state. This makes going back
-                                // to the start destination when pressing back in any other bottom tab.
-//                popUpTo(findStartDestination(navController.graph).id) {
-//                    saveState = true }
-                            }
-                        }
-                    )
-                }
-            },
-            scaffoldState = appState.scaffoldState
-        ) {
-            Navigation(navHostController = navController,
-                onDestinationChangedListener = { controller, destination, arguments ->
-                    if (destination.route.equals(DETAIL)) {
-                        topBarData = TopBarHelper.getTopBarData(
-                            destination.route ?: "",
-                            DETAIL,
-                            appState.resources,
-                            12
-                        )
-                    } else {
-                        topBarData = TopBarHelper.getTopBarData(
-                            destination.route ?: "",
-                            resources = appState.resources
+                topBar = {
+                    if (topBarData.shouldShow) {
+                        TopBar(
+                            topBarData = topBarData,
+                            appGlobalState = appState
                         )
                     }
-                })
+                },
+
+                bottomBar = {
+                    Column {
+
+                        if (appState.shouldShowBottomBar) {
+                            BottomNav(
+                                items = bottomTabs,
+
+                                navController = navController,
+
+                                onItemClick = {
+                                    navController.navigate(it.route) {
+                                        launchSingleTop = true
+                                        restoreState = true
+                                        // Pop up backstack to the first destination and save state. This makes going back
+                                        // to the start destination when pressing back in any other bottom tab.
+//                popUpTo(findStartDestination(navController.graph).id) {
+//                    saveState = true }
+                                    }
+                                }
+                            )
+                        }
+
+                        Spacer(
+                            Modifier
+                                .navigationBarsHeight()
+                                .fillMaxWidth()
+                        )
+                    }
+                },
+                scaffoldState = appState.scaffoldState
+            ) { innerPaddingModifier ->
+                Navigation(
+                    modifier = Modifier.padding(innerPaddingModifier),
+                    navHostController = navController,
+                    onDestinationChangedListener = { controller, destination, arguments ->
+                        if (destination.route.equals(DETAIL)) {
+                            topBarData = TopBarHelper.getTopBarData(
+                                destination.route ?: "",
+                                DETAIL,
+                                appState.resources,
+                                12
+                            )
+                        } else {
+                            topBarData = TopBarHelper.getTopBarData(
+                                destination.route ?: "",
+                                resources = appState.resources
+                            )
+                        }
+                    })
+            }
         }
     }
 

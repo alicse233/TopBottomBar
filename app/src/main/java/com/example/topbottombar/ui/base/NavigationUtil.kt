@@ -15,12 +15,14 @@ import androidx.navigation.compose.composable
 
 @Composable
 fun Navigation(
+    modifier: Modifier = Modifier,
     navHostController: NavHostController,
     onDestinationChangedListener: NavController.OnDestinationChangedListener
 ) {
     NavHost(
         navHostController,
         startDestination = HOME,
+        modifier = modifier
     ) {
         composable(HOME) {
             HomeScreen(navController = navHostController)
